@@ -1,7 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
+import 'package:yaru/yaru.dart';
 
-void main() {
+void main() async {
+  if (Platform.isLinux) {
+    await YaruWindowTitleBar.ensureInitialized();
+  }
   runApp(const HyperFetchApp());
 }
 
@@ -13,10 +19,21 @@ class HyperFetchApp extends StatelessWidget {
     return MaterialApp(
       title: 'HyperFetch',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+      theme: Platform.isLinux
+          ? yaruLight
+          : ThemeData(
+              useMaterial3: true,
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            ),
+      darkTheme: Platform.isLinux
+          ? yaruDark
+          : ThemeData(
+              useMaterial3: true,
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.deepPurple,
+                brightness: Brightness.dark,
+              ),
+            ),
       home: const HomeScreen(),
     );
   }
